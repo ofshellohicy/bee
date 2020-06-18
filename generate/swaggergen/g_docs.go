@@ -36,7 +36,7 @@ import (
 
 	"github.com/astaxie/beego/swagger"
 	"github.com/astaxie/beego/utils"
-	"github.com/beego/bee/logger"
+	beeLogger "github.com/beego/bee/logger"
 	bu "github.com/beego/bee/utils"
 )
 
@@ -264,7 +264,7 @@ func GenerateDocs(curpath string) {
 		if im.Name != nil {
 			localName = im.Name.Name
 		}
-		beeLogger.Log.Infof("localName: %s, %v", localName, im.Path.Value)
+
 		analyseControllerPkg(path.Join(curpath, "vendor"), localName, im.Path.Value)
 	}
 	for _, d := range f.Decls {
@@ -461,6 +461,10 @@ func analyseControllerPkg(vendorPath, localName, pkgpath string) {
 		}
 	}
 	beeLogger.Log.Infof("pkgRealpath:%v", pkgRealpath)
+	if strings.Contains(pkgRealpath, "com.fatepair") {
+		pkgRealpath = strings.Replace(pkgRealpath, "com.fatepair.city", "StarCity", -1)
+	}
+	beeLogger.Log.Infof("fixed pkgRealpath:%v", pkgRealpath)
 	if pkgRealpath != "" {
 		if _, ok := pkgCache[pkgpath]; ok {
 			return
